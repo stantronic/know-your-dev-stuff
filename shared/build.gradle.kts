@@ -2,8 +2,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.ksp)
+//    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -32,9 +33,19 @@ kotlin {
         commonMain.dependencies {
             //put your multiplatform dependencies here
             implementation(libs.koin)
+            implementation(libs.ktor.client)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.kotlinx.coroutines.android)
         }
     }
 }
@@ -52,4 +63,5 @@ android {
 }
 
 dependencies {
+
 }

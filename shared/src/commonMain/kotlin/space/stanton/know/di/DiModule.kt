@@ -4,9 +4,11 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
+import space.stanton.know.networking.ktorClient
 
 val appModule = module {
     factoryOf(::ConcreteDependency) { bind<AbstractDependency>() }
+    ktorClient()
 }
 
 

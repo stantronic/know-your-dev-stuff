@@ -1,13 +1,16 @@
 package space.stanton.know
 
-import space.stanton.know.di.AbstractDependency
 import space.stanton.know.di.KoinInstance
+import space.stanton.know.networking.PeopleService
 
 class Greeting {
-   val dep : AbstractDependency  = KoinInstance.koin.get()
 
-    fun greet(): String {
+    private val peopleService: PeopleService = KoinInstance.koin.get()
 
-        return "Know Your Dev Stuff! ${dep.message}"
+    suspend fun greet(): String {
+
+        return "Know Your Dev Stuff! ${
+            peopleService.getPeople()
+        }"
     }
 }
