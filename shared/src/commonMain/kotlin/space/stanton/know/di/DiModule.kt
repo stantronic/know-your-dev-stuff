@@ -1,20 +1,26 @@
 package space.stanton.know.di
 
 import org.koin.core.context.startKoin
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
-import space.stanton.know.networking.ktorClient
+import org.koin.core.module.Module
 
-val appModule = module {
-    factoryOf(::ConcreteDependency) { bind<AbstractDependency>() }
-    ktorClient()
+//val sharedModule = module {
+//    factoryOf(::ConcreteDependency) { bind<AbstractDependency>() }
+//    ktorClient()
+//}
+//
+expect fun platformModule(): Module
+
+
+fun insertKoin(){
+    startKoin {
+        modules(platformModule())
+    }
 }
 
-
-val KoinInstance = startKoin {
-    modules(appModule)
-}
+//
+//val KoinInstance = startKoin {
+//    modules(platformModule())
+//}
 
 interface AbstractDependency {
     val message: String

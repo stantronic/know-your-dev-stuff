@@ -12,11 +12,14 @@ import space.stanton.know.android.welcome.WelcomeScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import space.stanton.know.android.questions.QuestionsScreen
+import space.stanton.know.di.insertKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        insertKoin()
         setContent {
             MyApplicationTheme {
                 val navController = rememberNavController()
@@ -30,7 +33,7 @@ class MainActivity : ComponentActivity() {
                         })
                     }
                     composable("questions") {
-                        Text("TODO")
+                        QuestionsScreen()
                     }
                 }
             }

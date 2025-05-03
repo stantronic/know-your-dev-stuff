@@ -47,4 +47,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.android.compat)
 }
