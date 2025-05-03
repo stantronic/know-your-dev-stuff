@@ -11,5 +11,6 @@ object Palette {
 
     val CreamyYellow = Color(0xFFF3E7B0)
 
+    val DeepMagenta = Color(0xFF811466)
 
 }
