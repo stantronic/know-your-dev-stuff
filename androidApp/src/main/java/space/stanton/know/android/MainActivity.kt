@@ -9,6 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import space.stanton.know.android.theme.MyApplicationTheme
 import space.stanton.know.android.welcome.WelcomeScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +19,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                WelcomeScreen()
+                val navController = rememberNavController()
+                NavHost(
+                    navController,
+                    startDestination = "welcome"
+                ) {
+                    composable("welcome") {
+                        WelcomeScreen(onBegin = {
+                            navController.navigate("questions")
+                        })
+                    }
+                    composable("questions") {
+                        Text("TODO")
+                    }
+                }
             }
         }
     }
