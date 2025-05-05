@@ -8,5 +8,6 @@ plugins {
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.buildKonfig) apply false
+    alias(libs.plugins.kotlinxSerialization) apply false
 }
 

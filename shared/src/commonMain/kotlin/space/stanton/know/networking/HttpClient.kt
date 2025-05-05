@@ -1,12 +1,10 @@
 package space.stanton.know.networking
 
 import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.bodyAsText
-import kotlinx.coroutines.runBlocking
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
-import space.stanton.know.BuildKonfig
 
 
 fun Module.ktorClient() {
@@ -15,18 +13,12 @@ fun Module.ktorClient() {
 
 
 val AppHttpClient = createHttpClient().config {
-
-}
-
-
-fun HttpClient.getQuestions(): String =
-    runBlocking {
-        val response = get("https://quizapi.io/api/v1/questions") {
-            parameter("apiKey", BuildKonfig.QUIZAPI_KEY)
-            parameter("limit", 10)
-        }
-        response.bodyAsText()
+    install(ContentNegotiation) {
+        json(Json {
+            ignoreUnknownKeys = true
+        })
     }
+}
 
 
 expect fun createHttpClient(): HttpClient

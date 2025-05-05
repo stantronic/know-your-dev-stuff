@@ -3,6 +3,7 @@ package space.stanton.know.di
 import androidx.lifecycle.ViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import space.stanton.know.presentation.QuestionsPresenter
 
 
 actual fun platformModule() = module {
