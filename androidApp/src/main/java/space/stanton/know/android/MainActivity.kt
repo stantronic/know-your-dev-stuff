@@ -4,16 +4,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import space.stanton.know.android.theme.MyApplicationTheme
-import space.stanton.know.android.welcome.WelcomeScreen
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import space.stanton.know.android.questions.QuestionsScreen
+import space.stanton.know.android.score.ScoreScreen
+import space.stanton.know.android.theme.MyApplicationTheme
+import space.stanton.know.android.welcome.WelcomeScreen
 import space.stanton.know.di.insertKoin
+import space.stanton.know.presentation.QuizScore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,23 +34,32 @@ class MainActivity : ComponentActivity() {
                         })
                     }
                     composable("questions") {
-                        QuestionsScreen()
+                        QuestionsScreen(
+                            onComplete = { value ->
+                                println(value)
+                                navController.navigate("score?value=$value")
+                            }
+                        )
+                    }
+                    composable(
+                        "score?value={value}",
+                        arguments = listOf(
+                            navArgument("value") {
+                                defaultValue = ""
+                                type = NavType.StringType
+                            })
+                    ) {
+                        ScoreScreen(
+                            score = QuizScore.fromJson(
+                                it.arguments?.getString("value").orEmpty()
+                            ),
+                            toStart = {
+                                navController.navigate("welcome")
+                            }
+                        )
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun GreetingView(text: String) {
-    Text(text = text)
-}
-
-@Preview
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        GreetingView("Hello, Android!")
     }
 }

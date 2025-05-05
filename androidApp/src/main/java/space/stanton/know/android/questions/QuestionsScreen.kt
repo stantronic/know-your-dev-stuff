@@ -9,13 +9,21 @@ import space.stanton.know.android.AppScreen
 import space.stanton.know.di.QuestionsViewModel
 
 @Composable
-fun QuestionsScreen(viewModel: QuestionsViewModel = koinViewModel()) {
+fun QuestionsScreen(
+    viewModel: QuestionsViewModel = koinViewModel(),
+    onComplete: (String) -> Unit = {}
+) {
     AppScreen {
-        LaunchedEffect(Unit) {
-            viewModel.fetch()
-        }
+        LaunchedEffect(Unit) { viewModel.fetch() }
 
         val question by viewModel.currentQuestion.collectAsState()
+        val score by viewModel.score.collectAsState()
+
+        LaunchedEffect(score.complete) {
+            if (score.complete) {
+                onComplete(score.toJson())
+            }
+        }
         question?.let {
             QuestionPage(it, viewModel::answerQuestion)
         }
