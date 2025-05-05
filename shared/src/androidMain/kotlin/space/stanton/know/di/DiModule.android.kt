@@ -11,6 +11,5 @@ actual fun platformModule() = module {
 }
 
 
-class QuestionsViewModel(private val exampleDependency: QuestionsPresenter) : ViewModel() {
-    fun getMessage() = exampleDependency.message
-}
+class QuestionsViewModel(private val presenter: QuestionsPresenter) : ViewModel(),
+    QuestionsPresenter by presenter
