@@ -18,20 +18,32 @@ fun Module.questionsPresenter(): KoinDefinition<QuestionsPresenter> =
 
 interface QuestionsPresenter {
 
+    val currentQuestion: StateFlow<QuestionVmo?>
     fun fetch()
-
-    val questionFlow: StateFlow<List<QuestionVmo>>
+    fun answerQuestion(isCorrect: Boolean)
 }
 
 class RealQuestionsPresenter(private val repository: QuestionsRepository) : QuestionsPresenter {
-    override val questionFlow = MutableStateFlow<List<QuestionVmo>>(emptyList())
+    private val questionFlow = MutableStateFlow<List<QuestionVmo>>(emptyList())
+
+    override val currentQuestion = MutableStateFlow<QuestionVmo?>(null)
 
     private val scope = CoroutineScope(Dispatchers.Default)
+
+    private var score = 0
+    private var index = 0
 
     override fun fetch() = scope.launch {
         val questions = repository.getQuestions().map { it.toVmo() }
         questionFlow.update { questions }
+        currentQuestion.update { questionFlow.value.firstOrNull() }
     }.toUnit()
+
+    override fun answerQuestion(isCorrect: Boolean) {
+        if (isCorrect) score++
+        index++
+        currentQuestion.update { questionFlow.value.getOrNull(index) }
+    }
 }
 
 
