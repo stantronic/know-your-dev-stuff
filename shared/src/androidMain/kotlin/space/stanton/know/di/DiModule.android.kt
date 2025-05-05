@@ -13,3 +13,4 @@ actual fun platformModule() = module {
 
 class QuestionsViewModel(private val presenter: QuestionsPresenter) : ViewModel(),
     QuestionsPresenter by presenter
+

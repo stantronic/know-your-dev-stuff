@@ -2,34 +2,38 @@ import SwiftUI
 import shared
 
 
-
 extension ContentView {
     class ViewModel: ObservableObject {
         
-        @Published var text = "Loading..."
+        @Published var currentQuestion : QuestionVmo? = nil
+        
+        var iosViewModel = IosQuestionViewModel.shared.self
     
-        
-        let queue = DispatchQueue.global(qos: .background)
-        
-        func updateGreeting(_ greeting: String){
-            text = greeting
-        }
-        
-        init() {
-            Task {
-                do{
-                    
-                    let greeting = try await Greeting().greet()
-                        
-                    await MainActor.run {
-                        self.updateGreeting(greeting)
-                    }
-                } catch {
-                    print(error)
+        init(){
+            DiModuleKt.insertKoin()
+           
+            Task { @MainActor in
+                iosViewModel.onNewQuestion { question in
+                    self.updateQuestion(question: question)
                 }
+                iosViewModel.fetch()
             }
         }
+
+        func updateQuestion(question: QuestionVmo?){
+                
+            self.currentQuestion = question
+        }
+        
+        
+        func answerQuestion(isCorrect: Bool){
+            iosViewModel.answer(isCorrect: isCorrect)
+        }
     }
+}
+
+extension AnswerVmo :@retroactive Identifiable {
+    public var id: Int { self.text.hashValue }
 }
 
 
@@ -38,7 +42,26 @@ struct ContentView: View {
 	 @ObservedObject private(set) var viewModel: ViewModel
 
 	var body: some View {
-		Text(viewModel.text)
+        let question = viewModel.currentQuestion
+        
+        VStack (spacing: 8){
+            if question == nil {
+                Text("Loading...")
+            } else {
+                Text(question?.text ?? "")
+                ForEach(question!.answers) { answer in
+                    Button(action: {
+                        self.viewModel.answerQuestion(isCorrect: answer.isCorrect)
+                    }) {
+                        Text(answer.text)
+                    }
+                    .padding()
+                }
+            }
+        }
+        .padding(
+            .all, 20
+        )
 	}
 }
 
