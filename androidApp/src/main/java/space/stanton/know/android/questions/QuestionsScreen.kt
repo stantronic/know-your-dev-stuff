@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import org.koin.androidx.compose.koinViewModel
 import space.stanton.know.android.AppScreen
 import space.stanton.know.android.ui.LargeSpacer
@@ -22,14 +23,20 @@ fun QuestionsScreen(
     onComplete: (String) -> Unit = {}
 ) {
     AppScreen {
-        LaunchedEffect(Unit) { viewModel.fetch() }
-
         val question by viewModel.currentQuestion.collectAsState()
         val score by viewModel.score.collectAsState()
+        val lifecycleOwner = LocalLifecycleOwner.current
+        LaunchedEffect(lifecycleOwner) {
+            if (question == null) {
+                viewModel.fetch()
+            }
+        }
 
         LaunchedEffect(score.complete) {
             if (score.complete) {
-                onComplete(score.toJson())
+                val json = score.toJson()
+                viewModel.reset()
+                onComplete(json)
             }
         }
 
