@@ -1,10 +1,12 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.androidLibrary)
-//    alias(libs.plugins.ksp)
+    alias(libs.plugins.buildKonfig)
 }
 
 kotlin {
@@ -61,6 +63,26 @@ kotlin {
                 debugImplementation(libs.compose.ui.tooling)
             }
         }
+    }
+}
+
+
+buildkonfig {
+    packageName = "space.stanton.know"
+    defaultConfigs {
+        val localProperties = Properties().apply {
+            rootProject.file("local.properties").reader().use(::load)
+        }
+
+        buildConfigField(
+            FieldSpec.Type.STRING,
+            "QUIZAPI_KEY",
+            checkNotNull(
+                "${localProperties["space.stanton.know.quizapi.token"]}"
+            ) {
+                "No QuizApi key provided"
+            }
+        )
     }
 }
 
