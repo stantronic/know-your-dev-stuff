@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +24,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import space.stanton.know.presentation.QuizScore
-import space.stanton.know.ui.CommonTypography.normalTextStyle
 import space.stanton.know.ui.CommonTypography.scoreTextStyle
 
 @Composable
@@ -41,28 +41,31 @@ fun ScoreScreen(score: QuizScore, toStart: () -> Unit = {}) {
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             var visible: Boolean by remember { mutableStateOf(false) }
+
             LaunchedEffect(score) {
                 visible = true
             }
-
             val scope = rememberCoroutineScope()
 
-            Text("You scored", style = normalTextStyle, modifier = Modifier.clickable {
 
-                scope.launch {
-                    visible = false
-                    delay(3000)
-                    visible = true
-                }
-            })
-
+            TypewriterText(
+                "You scored... ",
+                delay = 200,
+                modifier = Modifier.clickable {
+                    scope.launch {
+                        visible = false
+                        delay(3000)
+                        visible = true
+                    }
+                })
 
             val animatedScale by animateFloatAsState(
                 targetValue = if (visible) 3.0f else 0.3f,
                 animationSpec = tween(
                     600,
-                    delayMillis = 1000,
+                    delayMillis = 2300,
                     easing = CubicBezierEasing(0.17f, 0.67f, 0.87f, 1.44f)
                 ),
                 label = "score_scale"
@@ -78,8 +81,19 @@ fun ScoreScreen(score: QuizScore, toStart: () -> Unit = {}) {
                 }
             )
 
-            Text("out of ${score.total}", style = normalTextStyle)
-            AppButton("Back to start", onClick = toStart)
+            TypewriterText("...out of a possible ${score.total} ", delay = 3200)
+
+
+            val buttonY by animateFloatAsState(
+                if (visible) 0f else 700f,
+                animationSpec = tween(700, delayMillis = 7000)
+            )
+
+            Box(Modifier.graphicsLayer {
+                translationY = buttonY
+            }) {
+                AppButton("Back to start", onClick = toStart)
+            }
         }
     }
 }
