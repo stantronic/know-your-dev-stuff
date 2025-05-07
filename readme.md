@@ -10,9 +10,16 @@ You will need
 - The Kotlin Multiplatform plugin for Android Studio
 - Latest Xcode
 - Your own API key for the third-party QuizAPI - https://quizapi.io/
-    - add the key in the local.properties like this
+    - add the key in the local.properties like this:
     `space.stanton.know.quizapi.token=<YOUR TOKEN HERE>`
     - This file does not get committed to source control
 
+
+A tool called kdoctor can be helpful:
+
+`brew install kdoctor`
+`kdoctor`
+
+
 You can open the multiplatform project at the root directory in Android Studio
-You can open the ios app from the /iosApp folder
+You can open the ios app from the `/iosApp` folder

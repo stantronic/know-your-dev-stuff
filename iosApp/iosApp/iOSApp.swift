@@ -47,10 +47,14 @@ struct iOSApp: App {
                                 )
                             )
                         case .score(let value):
-                            Text("Score: \(value)")
-                                .onTapGesture {
-                                    path.removeAll()
-                                }
+                            ScoreView(
+                                score: QuizScore(
+                                score: Int32(value),
+                                total: 10,
+                                complete: true
+                            ), toStart: {
+                                path.removeAll()
+                            })
                         }
                     }
                 )

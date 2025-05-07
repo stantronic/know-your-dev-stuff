@@ -36,7 +36,9 @@ extension QuestionView {
             Task {
                 try await Task.sleep(for: .seconds(1))
                 print(score?.toJson() ?? "No score")
-                onScore(score!)
+                if score?.complete == true {
+                    onScore(score!)
+                }
             }
         }
     }
@@ -80,3 +82,6 @@ struct QuestionView_previews: PreviewProvider {
         QuestionView(viewModel: QuestionView.ViewModel(onScore: { score in print(score)}))
     }
 }
+
+
+

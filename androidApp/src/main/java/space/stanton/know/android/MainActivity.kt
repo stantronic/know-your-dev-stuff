@@ -10,11 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import space.stanton.know.android.questions.QuestionsScreen
-import space.stanton.know.android.score.ScoreScreen
 import space.stanton.know.android.theme.MyApplicationTheme
 import space.stanton.know.android.welcome.WelcomeScreen
 import space.stanton.know.di.insertKoin
 import space.stanton.know.presentation.QuizScore
+import space.stanton.know.ui.ScoreScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,14 +49,16 @@ class MainActivity : ComponentActivity() {
                                 type = NavType.StringType
                             })
                     ) {
-                        ScoreScreen(
-                            score = QuizScore.fromJson(
-                                it.arguments?.getString("value").orEmpty()
-                            ),
-                            toStart = {
-                                navController.navigate("welcome")
-                            }
-                        )
+                        AppScreen {
+                            ScoreScreen(
+                                score = QuizScore.fromJson(
+                                    it.arguments?.getString("value").orEmpty()
+                                ),
+                                toStart = {
+                                    navController.navigate("welcome")
+                                }
+                            )
+                        }
                     }
                 }
             }

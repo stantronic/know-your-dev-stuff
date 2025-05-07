@@ -7,6 +7,8 @@ object Palette {
 
     val MidnightBlue = Color(0xFF03142e)
 
+    val DuskBlue = Color(0xFF05224D)
+
     val NeonPink = Color(0xFFE258FF)
 
     val CreamyYellow = Color(0xFFF3E7B0)
